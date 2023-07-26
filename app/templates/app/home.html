@@ -1,0 +1,52 @@
+{% include "base.html" %}
+
+{% block title %}
+    <title>Budget Tracking</title>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .body-div {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .body-div form {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .body-div form input {
+            
+        }
+        .btn-submit {
+            margin-top: 8px;
+            cursor: pointer;
+            background-color: #353740;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+ {% block content %}
+    <div class="main-body">
+        <div class="body-div">
+            <h2>Add Expense</h2>
+            <form method="post">
+                {{ form }}
+                {% csrf_token %}
+                <input type="submit" class="btn-submit" value="Create">
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        
+    </script>
+{% endblock %}

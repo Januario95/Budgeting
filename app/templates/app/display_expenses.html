@@ -1,0 +1,328 @@
+{% include "base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Display Expenses</title>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .main-body {
+            background: url("{% static '50-30-20-budgeting-rule.png' %}");
+            width: 100%;
+            height: 100%;
+            min-height: 86vh;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        .body-div {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0px;
+            padding-top: 0px;
+        }
+        .body-div form {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        input, select {
+            height: 30px;
+            width: 70%;
+            border-radius: 17px;
+            border: none;
+            height: 33px;
+            text-align: center;
+            outline: none;
+        }
+        input:focus, select:focus {
+            outline: 2px solid lightgreen;
+        }
+        .btn-submit {
+            margin-top: 8px;
+            cursor: pointer;
+            background-color: #353740;
+            color: white;
+            font-weight: bold;
+        }
+        .form-row {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-row label {
+            color: white;
+        }
+        .expenses {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .expenses table {
+            width: 70%;
+            border-collapse: collapse;
+        }
+        .expenses table th {
+            background-color: #04AA6D
+            /*color: white;
+            background-color: #353740;
+            */
+        }
+        .expenses table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .expenses table tr:nth-child(odd) {
+            background-color: white;
+        }
+        .expenses table tr:hover {background-color: #ddd;}
+        .expenses table th, .expenses table td {
+            border: 1px solid #ccc;
+            padding: 6px;
+        }
+        .table-header {
+            cursor: pointer;
+        }
+        .center-td {
+            text-align: center;
+        }
+        th {
+            font-size: 15px;
+        }
+        td {
+            font-size: 13px;
+        }
+        .remove-expense a {
+            text-decoration: none;
+            color: rgb(239, 66, 66);
+        }
+    </style>
+{% endblock %}
+
+ {% block content %}
+    <div class="main-body">
+        <div class="body-div">
+            <form method="post" class="expenses-filter-form">
+                <div class="form-row">
+                    <label for="id_year">Year</label>
+                    {{ form.year }}
+                </div>
+                <div class="form-row">
+                    <label for="id_month">Month</label>
+                    {{ form.month }}
+                </div>
+                <div class="form-row">
+                    <label for="id_expense_type">Expense type</label>
+                    {{ form.expense_type }}
+                </div>
+                <div class="form-row">
+                    <label for="id_priority">Priority</label>
+                    {{ form.priority }}
+                </div>
+                <div class="form-row">
+                    <label for="id_completed">Completed</label>
+                    {{ form.completed}}
+                </div>
+                <div class="form-row">
+                    {% csrf_token %}
+                    <label>.</label>
+                    <input type="submit" class="btn-submit" value="Filter">
+                </div>
+            </form>
+            <div class="expenses">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="table-header">
+                                #
+                            </th>
+                            <th class="table-header name" onclick="sortTable('name')">
+                                Item
+                                <i class="fa-solid fa-sort"></i>
+                            </th>
+                            <th class="table-header amount" onclick="sortTable('amount')">
+                                Amount
+                                ⮝
+                            </th>
+                            <th class="table-header month" onclick="sortTable('month')">
+                                Month
+                                ⮝
+                            </th>
+                            <th class="table-header year" onclick="sortTable('year')">
+                                Year
+                                ⮝
+                            </th>
+                            <th class="table-header type" onclick="sortTable('expense_type')">
+                                Type
+                                ⮝
+                            </th>
+                            <th class="table-header priority" onclick="sortTable('priority')">
+                                Priority
+                                ⮝
+                            </th>
+                            <th class="table-header completed" onclick="sortTable('completed')">
+                                Completed
+                                ⮝
+                            </th>
+                            <!--
+                            <th>
+                                Delete
+                            </th>
+                            -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td style="text-align:right;font-weight:bold;">Total</td>
+                            <td style="text-align:center;font-weight:bold;">{{ total }}</td>
+                            <td colspan="5"></td>
+                        </tr>
+                        {% if expenses %}
+                            {% for expense in expenses %}
+                                <tr>
+                                    <td style="text-align:center;">{{ forloop.counter }}</td>
+                                    <td>{{ expense.name }}</td>
+                                    <td class="center-td">{{ expense.amount }}</td> 
+                                    <td class="center-td">{{ expense.month }}</td>
+                                    <td class="center-td">{{ expense.year }}</td>
+                                    <td class="center-td">{{ expense.expense_type }}</td>
+                                    <td class="center-td">{{ expense.priority }}</td>
+                                    {% if expense.completed %}
+                                        <td class="center-td" style="color:#46ACC2;font-size:15px;font-weight:bold;">✓</td>
+                                    {% else %}
+                                        <td class="center-td" style="color:red;font-size:15px;font-weight:bold;">✗</td>
+                                    {% endif %}
+                                    <!--
+                                    <td class="center-td remove-expense">
+                                        <a href="#" onclick="deleteExpense('{{ expense.pk }}', '{{ expense.name }}')">&#10006;</a>
+                                    </td>
+                                    -->
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                                <tr>
+                                    <td colspan="8" style="text-align:center;">No result for your filter.</td>
+                                </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        let tbody = document.querySelector('tbody');
+        let year = document.getElementById('id_year');
+        let month = document.getElementById('id_month');
+        let expenseType = document.getElementById('id_expense_type');
+        let priority = document.getElementById('id_priority');
+        let completed_field = document.getElementById('id_completed');
+
+        function deleteExpense(pk, expenseName) {
+            let csrfToken = "{{ csrf_token }}";
+            let delete_code = prompt(`Enter code to delete expense "${expenseName}"`);
+            
+            if (delete_code === null) {
+
+            } else {
+                fetch('/api/delete_expense/', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        'pk': pk,
+                        'delete_code': delete_code
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        let correct_code = data.correct_code;
+                        if (correct_code) {
+                            alert(`"${expenseName}" deleted successfully!`);
+                            window.location.reload();
+                        } else {
+                            alert('Wrong passcode');
+                        }
+                    })
+                    .catch(err => console.log(err));
+            }
+        }
+
+        function sortTable(className) {
+            let csrfToken = "{{ csrf_token }}";
+            fetch('/api/sort_table/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    'value': className,
+                    'year': year.value,
+                    'month': month.value,
+                    'expense_type': expenseType.value,
+                    'priority': priority.value,
+                    'completed': completed_field.value,
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    let expenses = data.data;
+                    let total = data.total;
+                    tbody.innerHTML = '';
+                    let index = 1;
+
+                    let tr = document.createElement('tr');
+                    tr.innerHTML += `
+                        <td></td>
+                            <td style="text-align:right;font-weight:bold;">Total</td>
+                            <td style="text-align:center;font-weight:bold;">${ total }</td>
+                            <td colspan="5"></td>
+                    `;
+                    tbody.appendChild(tr);
+
+                    for (let expense of expenses) {let completed;
+                        if (expense.completed) {
+                            completed = `<td class="center-td" style="color:#46ACC2;font-weight:bold;">✓</td>`
+                        } else {
+                            completed = `<td class="center-td" style="color:red;font-weight:bold;">✗</td>`;
+                        }
+                        tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td style="text-align:center;">${ index }</td>
+                            <td>${ expense.name }</td>
+                            <td class="center-td">${ expense.amount }</td>
+                            <td class="center-td">${ expense.month.name }</td>
+                            <td class="center-td">${ expense.year }</td>
+                            <td class="center-td">${ expense.expense_type.name }</td>
+                            <td class="center-td">${ expense.priority }</td>
+                            ${ completed }
+                        `;
+                        tbody.appendChild(tr);
+                        index += 1;
+                    }
+                })
+                .catch(err => console.error(err));
+        }
+    </script>
+{% endblock %}

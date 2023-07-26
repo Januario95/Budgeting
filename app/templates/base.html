@@ -1,0 +1,394 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="{% static 'roboto.css' %}">
+        {% block title %}
+            <title>Budget Tracking</title>
+        {% endblock %}
+        
+        <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                padding: 0;
+            }
+            .header {
+                padding: 8px 0px;
+                margin: 0;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: center;
+                background-color: #353740;
+                font-weight: bold;
+            }
+            .top-header {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+            .logo {
+                color: white;
+                font-size: 25px;
+                text-decoration: none;
+            }
+            .search-div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: white;
+                padding: 2px;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                margin: 6px 0px 0px 0px;
+                cursor: pointer;
+            }
+            .search-div-with-close-btn {
+                width: 25%;
+                display: flex;
+                justify-content: space-between;
+                background-color: #ccc;
+                border-radius: 20px;
+                padding-right: 12px;
+                align-items: center;
+                margin-top: 6px;
+            }
+            .close-search-div a {
+                color: rgb(225, 71, 71);
+                cursor: pointer;
+            }
+            .search-div-2 {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: white;
+                padding: 2px 0px 2px 7px;
+                width: 85%;
+                height: 30px;
+                border-radius: 20px;
+            }
+            .search-field {
+                border: none;
+                outline: none;
+                width: 90%;
+                height: 30px;
+                border-radius: 10px;
+            }
+            .search-field:focus {
+                outline: none;
+            }
+            .search-btn {
+                cursor: pointer;
+            }
+            .search-btn-second {
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background: teal;
+                height: 34px;
+                width: 34px;
+            }
+            .bottom-header {
+                width: 50%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                margin-top: 10px;
+            }
+            .bottom-header a {
+                color: #ccc;
+                text-decoration: none;
+                transition: all 0.3s ease-in-out;
+            }
+            .bottom-header a:hover {
+                color: white;
+                transform: scale(1.01);
+            }
+            .div-clock {
+                width: 90px;
+                height: 26px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 2px;
+                padding-right: 3px;
+                padding-bottom: 2px;
+                padding-left: 0px;
+                margin-left: 0px;
+                border: 1px solid #ccc;
+                border-radius: 30px;
+                background-color: white;
+            }
+            .current-time {
+                font-size: 13px;
+                font-weight: bold;
+                padding: 0px;
+                margin: 0px;
+            }
+            .time {
+                font-size: 13px;
+                font-weight: bold;
+            }
+            .clock-start {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: left;
+                border: 2px solid #999;
+                background-color: deepskyblue;
+                height: 31px;
+                width: 31px;
+                color: white;
+                font-size: 15px;
+                font-weight: bold;
+                border-radius: 50%;
+            }
+            .div-clock button {
+                cursor: pointer;
+                border-radius: 15px;
+            }
+            .green-clock {
+                border: none;
+                color: white;
+                border: 2px solid #999;
+                margin-right: 5px;
+                background-color: deepskyblue;
+                /* background-color: #04AA6D; */
+            }
+            .red-clock {
+                border: none;
+                color: white;
+                border: 2px solid #999;
+                background-color: rgb(239, 66, 66);
+            }
+            .summary {
+                width: 40%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: white;
+                padding: 5px 10px;
+                margin-top: 10px;
+                border-radius: 30px;
+                border: 1px solid lightgreen;
+            }
+            @media screen and (max-width: 700px) {
+                .top-header {
+                    align-items: flex-start;
+                }
+                .bottom-header {
+                    flex-direction: column;
+                }
+                .bottom-header a {
+                    margin-bottom: 5px;
+                }
+                .div-clock {
+                    align-items: center;
+                    justify-content: center;
+                    width: 30px;
+                    height: 120px;
+                    flex-direction: column;
+                    margin: 0px;
+                    padding: 0px;
+                    border-radius: 15px;
+                }
+                .search-div-with-close-btn {
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 5px 0px;
+                    padding: 0px;
+                    height: 56px;
+                    width: 50%;
+                    border-radius: 30px;
+                }
+                .search-div-2 {
+                    width: 94%;
+                }
+                .clock-start {
+                    height: 31px;
+                    width: 31px;
+                    border-radius: 50%;
+                    margin-bottom: 5px;
+                    margin: 0px;
+                    padding: 0px;
+                }
+                .current-time {
+                    writing-mode: vertical-lr;
+                    text-orientation: upright;
+                }
+                .separator-1::before, .separator-2::before {
+                    content: '';
+                }
+                .separator-1::after, .separator-2::after {
+                    content: '';
+                }
+                .summary {
+                    flex-direction: column;
+                }
+                .summary span {
+                    margin-bottom: 5px;
+                }
+                .expenses-filter-form {
+                    flex-direction: column;
+                }
+                .expenses-filter-form th {
+                    font-size: 13px;
+                }
+                .expenses-filter-form td {
+                    font-size: 11px;
+                }
+            }
+            .certo-box {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background-color: deepskyblue;
+                border: none;
+                cursor: pointer;
+            }
+            .certo {
+                font-size: 14px;
+                font-weight: 600;
+            }
+        </style>
+        {% block style %}
+        {% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <div class="top-header">
+                    <a class="logo" href="{% url 'app:display_expenses' %}">Jaci inc.</a>
+
+                    <div class="bottom-header">
+                        <a href="{% url 'app:add_expense' %}">ADD EXPENSE</a>
+                        <a href="{% url 'app:display_expenses' %}">EXPENSES</a>
+                        <a href="{% url 'app:charts' %}">CHARTS</a>
+                        <a href="{% url 'app:guide_view' %}">GUIDE</a>
+                    </div>
+
+                    <div class="div-clock">
+                        <!-- <div class="certo-box">
+                            <div class="certo">✓</div>
+                        </div> -->
+                        <button class="clock-start">✓</button>
+                        <!-- <a class="current-time" hred="#"></a> -->
+                        <span class="hour time"></span>
+                        <span class="separator-1">:</span>
+                        <span class="minute time"></span>
+                        <span class="separator-2">:</span>
+                        <span class="second time"></span>
+                    </div>
+                </div>
+
+                <div class="summary">
+                    <span>Needs: {{ total_needs.total }}</span>
+                    <span>Wants: {{ total_wants.total }}</span>
+                    <span>Savings: {{ total_savings.total }}</span>
+                    <span>Total: {{ total_expenses.total }}</span>
+                </div>
+
+                <div class="search-div">
+                    <span class="search-btn">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </div>
+
+                <div class="search-div-with-close-btn">
+                    <div class="search-div-2">
+                        <input type="text" class="search-field" placeholder="Search">
+                        <span class="search-btn search-btn-second">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="close-search-div">
+                        <a>&#10006;</a>
+                    </div>
+                </div>
+                
+            </div>
+            
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <script src="{% static 'jquery-3.6.1.min.js' %}"></script>
+        <script>
+            let currentTime = document.querySelector('.current-time');
+            let startClock = document.querySelector('.clock-start');
+            let hour = document.querySelector('.hour');
+            let minute = document.querySelector('.minute');
+            let second = document.querySelector('.second');
+            let separator1 = document.querySelector('.separator-1');
+            let separator2 = document.querySelector('.separator-2');
+
+            let searchdDiv = $('.search-div');
+            let closeSeachDiv = $('.close-search-div a');
+            let searchDivWithCloseBtn = $('.search-div-with-close-btn');
+            closeSeachDiv.click(function() {
+                searchDivWithCloseBtn.hide();
+                searchdDiv.show();
+            });
+            searchDivWithCloseBtn.hide();
+            searchdDiv.click(function() {
+                searchDivWithCloseBtn.show();
+                searchdDiv.hide();
+            });
+
+            function formatTime(time) {
+                if (parseFloat(time) < 10) {
+                    time = '0' + time;
+                }
+                return time;
+            }
+            loadCurrentTime();
+            function loadCurrentTime() {
+                let time = new Date();
+                hour.textContent = formatTime(time.getHours());
+                minute.textContent = formatTime(time.getMinutes());
+                second.textContent = formatTime(time.getSeconds());
+                // currentTime.textContent = formatTime(time.getHours()) + ':' + formatTime(time.getMinutes()) + ':' + formatTime(time.getSeconds());
+            }
+            let setInterval1 = setInterval(loadCurrentTime, 1000);
+            startClock.addEventListener('click', e => {
+                let value = e.target.textContent;
+                
+                if (value === '✓') {
+                    startClock.classList.remove('green-clock');
+                    startClock.classList.add('red-clock');
+                    startClock.textContent = '✗';
+                    clearInterval(setInterval1);
+                } else {
+                    startClock.classList.remove('red-clock');
+                    startClock.classList.add('green-clock');
+                    startClock.textContent = '✓';
+                    setInterval1 = setInterval(loadCurrentTime, 1000);
+                }
+            });
+        </script>
+        {% block javascript %}
+        {% endblock %}
+    </body>
+</html>

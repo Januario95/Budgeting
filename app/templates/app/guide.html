@@ -1,0 +1,208 @@
+{% include "base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Display Expenses</title>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .main-body {
+            background: url("{% static '50-30-20-budgeting-rule.png' %}");
+            width: 100%;
+            height: 100%;
+            min-height: 76vh;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        .body-div {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0px;
+            padding-top: 0px;
+        }
+        .box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            color: white;
+            border: 1px solid #ccc;
+            background-color: teal;
+            margin-top: 10px;
+            border-radius: 25%;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 15px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            border-radius: 9px;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #04AA6D;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: #04AA6D;
+            cursor: pointer;
+        }
+
+
+        .slider-box {
+            width: 100%;
+            max-width: 370px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slider-box span {
+            font-size: 13px;
+        }
+        .corner-border-radius,
+        .span-max-width {
+            width: 300px;
+        }
+    </style>
+{% endblock %}
+
+ {% block content %}
+    <div class="main-body">
+        <div class="body-div">
+            <div class="padding-box slider-box">
+                <span class="span-max-width">Padding</span>
+                <input type="range" min="0" max="100" value="50" class="slider" id="padding-range">
+                <span class="padding-value"></span>
+            </div>
+            <div class="width-box slider-box">
+                <span class="span-max-width">Width</span>
+                <input type="range" min="0" max="200" value="100" class="slider" id="width-range">
+                <span class="width-value"></span>
+            </div>
+            <div class="height-box slider-box">
+                <span class="span-max-width">Height</span>
+                <input type="range" min="0" max="200" value="100" class="slider" id="height-range">
+                <span class="height-value"></span>
+            </div>
+            <div class="top-left-border-radius-box slider-box">
+                <span class="corner-border-radius">top-left-border-radius</span>
+                <input type="range" min="0" max="50" value="25" class="slider" id="top-left-border-radius">
+                <span class="top-left-border-radius"></span>
+            </div>
+            <div class="top-right-border-radius-box slider-box">
+                <span class="corner-border-radius">top-right-border-radius</span>
+                <input type="range" min="0" max="50" value="25" class="slider" id="top-right-border-radius">
+                <span class="top-right-border-radius"></span>
+            </div>
+            <div class="bottom-right-border-radius-box slider-box">
+                <span class="corner-border-radius">bottom-right-border-radius</span>
+                <input type="range" min="0" max="50" value="25" class="slider" id="bottom-right-border-radius">
+                <span class="bottom-right-border-radius"></span>
+            </div>
+            <div class="bottom-left-border-radius-box slider-box">
+                <span class="corner-border-radius">bottom-left-border-radius</span>
+                <input type="range" min="0" max="50" value="25" class="slider" id="bottom-left-border-radius">
+                <span class="bottom-left-border-radius"></span>
+            </div>
+            
+            <div class="box">Hello there!</div>
+        </div>
+        
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        var widthSlider = document.getElementById("width-range");
+        let heightSlider = document.getElementById('height-range');
+        
+        let box = document.querySelector('.box');
+        var output = document.getElementById("demo");
+        let widthValeu = document.querySelector('.width-value');
+        let heightValue = document.querySelector('.height-value');
+        widthValeu.textContent = widthSlider.value;
+        heightValue.textContent = heightSlider.value;
+
+        let paddingSlider = document.getElementById('padding-range');
+        let paddingValue = document.querySelector('.padding-value');
+        paddingSlider.oninput = function() {
+            let value = parseInt(this.value);
+            box.style.padding = `${value}px`;
+            paddingValue.textContent = value;
+            box.style.fontSize = `${value - 20}px`;
+        }
+
+        let topLeftBorderRadius = document.getElementById('top-left-border-radius');
+        let topLeftBorderRadiusValue = document.querySelector('.top-left-border-radius');
+        topLeftBorderRadius.oninput = function() {
+            let value = parseInt(this.value);
+            box.style.borderTopLeftRadius = `${value}%`;
+            topLeftBorderRadiusValue.textContent = value;
+        }
+
+        let topRightBorderRadius = document.getElementById('top-right-border-radius');
+        let topRightBorderRadiusValue = document.querySelector('.top-right-border-radius');
+        topRightBorderRadius.oninput = function() {
+            let value = parseInt(this.value);
+            box.style.borderTopRightRadius = `${value}%`;
+            topRightBorderRadiusValue.textContent = value;
+        }
+
+        let bottomRightBorderRadius = document.getElementById('bottom-right-border-radius');
+        let bottomRightBorderRadiusValue = document.querySelector('.bottom-right-border-radius');
+        bottomRightBorderRadius.oninput = function() {
+            let value = parseInt(this.value);
+            box.style.borderBottomRightRadius = `${value}%`;
+            bottomRightBorderRadiusValue.textContent = value;
+        }
+
+        let bottomLeftBorderRadius = document.getElementById('bottom-left-border-radius');
+        let bottomLeftBorderRadiusValue = document.querySelector('.bottom-left-border-radius');
+        bottomLeftBorderRadius.oninput = function() {
+            let value = parseInt(this.value);
+            box.style.borderBottomLeftRadius = `${value}%`;
+            bottomLeftBorderRadiusValue.textContent = value;
+        }
+
+        
+        
+
+        widthSlider.oninput = function() {
+            let value = parseInt(this.value);
+            widthValeu.textContent = value;
+            box.style.width = `${value}px`;
+        }
+        heightSlider.oninput = function() {
+            let value = parseInt(this.value);
+            heightValue.textContent = value;
+            box.style.height = `${value}px`;
+        }
+    </script>
+{% endblock %}
